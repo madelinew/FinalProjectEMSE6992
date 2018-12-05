@@ -126,6 +126,7 @@ fatal_16ds <- findingCellCases(fatal_16, 16)
 #     agemin (minimum age of person in car), agemax (max age of person in car), numfatal (number of fatalities in vehicle),
 #     day, month, year, date, modelyear, make, cellphoneuse
 
+
 #Function for labeling which cases had duplicate entries (due to mulitple vehicles or multiple people) 
 #INPUT: df = fatal_YYds
 #OUTPUT: fatal_YYds with duplicate label column
@@ -169,6 +170,29 @@ findingDuplicateCases <- function(df) {
 fatal_16nads <- findingDuplicateCases(fatal_16nads)
 fatal_16ds <- findingDuplicateCases(fatal_16ds)
 
+#function to pull Ford, Cadillac, Mercedes, and Volvo
+#MAKES: FARS CODE : MAKE NAME
+#   12 : Ford
+#   19 : Cadillac
+#   42 : Mercedes-Benz
+#   51 : Volvo
+pullingMakes <- function(df) {
+  fdf <- df[df$make == 12,]
+  fdf$makename <- "Ford"
+  cdf <- df[df$make == 19,]
+  cdf$makename <- "Cadillac"
+  mdf <- df[df$make == 42,]
+  mdf$makename <- "Mercedes"
+  vdf <- df[df$make == 51,]
+  vdf$makename <- "Volvo"
+  rdf <- rbind(fdf,cdf,mdf,vdf)
+  return(rdf)
+  
+}
+
+makedf <- pullingMakes(fatal_16ds)
+makedfna <- pullingMakes(fatal_16nads)
+
 
 #Function for returning data frame from fatal_16ds that were duplicates 
 #INPUT: df = fatal_YYds 
@@ -182,7 +206,7 @@ yesnadf <- function(df) {
   ndf <- data.frame(casenum = numeric(), statenum = numeric(), vehnum = numeric(), persontotal = numeric(),
                     agemin = numeric(), agemax = numeric(),
                     numfatal = numeric(), day = numeric(), month = numeric(),
-                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), cellphoneuse = numeric())
+                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), makename = character(), cellphoneuse = numeric())
   
   caselist <- unique(ydf$casestateveh)
   for (i in caselist) {
@@ -212,13 +236,13 @@ yesnadf <- function(df) {
     ndf <- rbind(ndf, data.frame(casenum = cr[1,1], statenum = cr[1,2], vehnum = cr[1,3], 
                                  persontotal = pt, agemin = minage, agemax = maxage, numfatal = cr[1,4],
                                  day = cr[1,5], month = cr[1,6], year = cr[1,7], date = cr[1,8], 
-                                 modelyear = cr[1,9], make = cr[1,10], cellphoneuse = cr[1,11]))
+                                 modelyear = cr[1,9], make = cr[1,10], makename = cr[1,12],cellphoneuse = cr[1,11]))
     
   }
   return(ndf)
 }
 
-yesdf16na <- yesnadf(fatal_16nads)
+yesdf16na <- yesnadf(makedfna)
 
 yesdf <- function(df) {
   ydf <- df[df$duplicate == "yes",]
@@ -229,7 +253,7 @@ yesdf <- function(df) {
   ndf <- data.frame(casenum = numeric(), statenum = numeric(), vehnum = numeric(), persontotal = numeric(),
                     agemin = numeric(), agemax = numeric(),
                     numfatal = numeric(), day = numeric(), month = numeric(),
-                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), cellphoneuse = numeric())
+                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), makename = character(), cellphoneuse = numeric())
   
   caselist <- unique(ydf$casestateveh)
   for (i in caselist) {
@@ -247,14 +271,14 @@ yesdf <- function(df) {
     ndf <- rbind(ndf, data.frame(casenum = cr[1,1], statenum = cr[1,2], vehnum = cr[1,3], 
                                  persontotal = pt, agemin = minage, agemax = maxage, numfatal = cr[1,4],
                                  day = cr[1,5], month = cr[1,6], year = cr[1,7], date = cr[1,8], 
-                                 modelyear = cr[1,9], make = cr[1,10], cellphoneuse = cr[1,11]))
+                                 modelyear = cr[1,9], make = cr[1,10], makename = cr[1,12], cellphoneuse = cr[1,11]))
     
   }
   return(ndf)
   
 }
 
-yesdf16 <- yesdf(fatal_16ds)
+yesdf16 <- yesdf(makedf)
 
 nodf <- function(df) {
   ndf <- df[df$duplicate == "no",]
@@ -264,7 +288,7 @@ nodf <- function(df) {
   mdf <- data.frame(casenum = numeric(), statenum = numeric(), vehnum = numeric(), persontotal = numeric(),
                     agemin = numeric(), agemax = numeric(),
                     numfatal = numeric(), day = numeric(), month = numeric(),
-                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), cellphoneuse = numeric())
+                    year = numeric(), date = character(), modelyear = numeric(), make = numeric(), makename = character(), cellphoneuse = numeric())
   caselist <- unique(ndf$casestateveh)
   for (i in caselist) {
     cdf <- ndf[ndf$casestateveh == i,]
@@ -276,14 +300,14 @@ nodf <- function(df) {
     mdf <- rbind(mdf, data.frame(casenum = cr[1,1], statenum = cr[1,2], vehnum = cr[1,3], 
                                  persontotal = pt, agemin = minage, agemax = maxage, numfatal = cr[1,5],
                                  day = cr[1,6], month = cr[1,7], year = cr[1,8], date = cr[1,9], 
-                                 modelyear = cr[1,10], make = cr[1,11], cellphoneuse = cr[1,12]))
+                                 modelyear = cr[1,10], make = cr[1,11], makename = cr[1,13], cellphoneuse = cr[1,12]))
     
   }
   return(mdf)
 }
 
-nodf16 <- nodf(fatal_16ds)
-nodf16na <- nodf(fatal_16nads)
+nodf16 <- nodf(makedf)
+nodf16na <- nodf(makedfna)
 
 fulldataset <- rbind(yesdf16, nodf16)
 fulldatasetna <- rbind(yesdf16na, nodf16na)
@@ -293,7 +317,7 @@ tableToCSV <- function(df) {
   #df = fulldata
   row.names(df)<- NULL
   colnames(df) <- c("casenum", "statenum", "vehnum", "persontotal","agemin","agemax","numfatal","day","month",
-                    "year","date","modelyear","make","cellphoneuse")
+                    "year","date","modelyear","make","makename","cellphoneuse")
   write.csv(df, file = "fulldatasetna.csv")
 }
 tableToCSV(fulldatasetna)
