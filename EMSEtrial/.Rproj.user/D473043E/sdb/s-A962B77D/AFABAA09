@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1544120097800.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "AFABAA09",
+    "lastKnownWriteTime" : 12884901894,
+    "last_content_update" : 1544120097800,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "CC63D1C8",
+        "caption" : "agesumperson",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=agesumperson&cache_key=CC63D1C8",
+        "displayedObservations" : 231,
+        "environment" : "",
+        "object" : "agesumperson",
+        "preview" : 0,
+        "totalObservations" : 231,
+        "variables" : 3
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

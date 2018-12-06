@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1544118301683.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "326AA82",
+    "lastKnownWriteTime" : 4300837120,
+    "last_content_update" : 1544118301683,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "6031B16C",
+        "caption" : "unqagemake",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=unqagemake&cache_key=6031B16C",
+        "displayedObservations" : 231,
+        "environment" : "",
+        "object" : "unqagemake",
+        "preview" : 0,
+        "totalObservations" : 231,
+        "variables" : 2
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

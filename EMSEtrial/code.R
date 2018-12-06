@@ -321,3 +321,40 @@ tableToCSV <- function(df) {
   write.csv(df, file = "fulldatasetna.csv")
 }
 tableToCSV(fulldatasetna)
+
+
+
+agemakefun <- function(df) {
+  ndf <- as.data.frame(cbind.data.frame(df$agemax, df$make, df$persontotal), 
+                                 header = TRUE, as.is = TRUE, stringsAsFactor=FALSE)
+  colnames(ndf) <- c("agemax","make","persontotal")
+  ndf$agemake <- paste(ndf$agemax,ndf$make, sep = "")
+  drop <- c("agemax","make","persontotal")
+  mdf= ndf[,!(names(ndf) %in% drop)]
+  
+  newdf <- data.frame(agemax = numeric(), make = numeric(), persontotal = numeric())
+  
+  nlist <- unique(mdf)
+  for (i in nlist) {
+    cdf <- ndf[ndf$agemake == i,]
+    
+    pt <- sum(cdf$persontotal)
+    
+    cr <- cdf
+    cr <- unique(cr)
+    
+   
+    newdf <- rbind(newdf, data.frame(agemax = cr[1,1], make = cr[1,2], persontotal = pt))
+  }
+  return(newdf)
+}
+
+agesumperson <- agemakefun(fulldataset)
+
+tableToCSV2 <- function(df) {
+  #df = fulldata
+  row.names(df)<- NULL
+  colnames(df) <- c("agemax","make","persontotal")
+  write.csv(df, file = "agemakepers.csv")
+}
+tableToCSV2(agesumperson)
